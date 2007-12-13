@@ -18,53 +18,8 @@ HTMLTemplatePanelX : html template inject the widget by id
 ITemplateSource : html template interface 
 
 
-Demo: 
-
-
-public class TestApp implements EntryPoint{ 
-
-
-    public void onModuleLoad() { 
-
-
-        TestHtml html = new TestHtml(); 
-
-
-        RootPanel.get().add(html); 
-    } 
-
-
-    static class TestHtml extends HTMLTemplatePanelX{ 
-        public TestHtml(){ 
-            Template template = (Template) 
-GWT.create(Template.class); 
-            String html = template.getWelcome(); 
-
-
-            TextBox txt1 = new TextBox(); 
-            Button  btn1 = new Button("Click welcome"); 
-
-
-            super.widgets.put("txt1", txt1); 
-            super.widgets.put("btn1", btn1); 
-            super.setHtml(html); 
-        } 
-
-
-        interface Template extends ITemplateSource{ 
-            /** 
-             * @gwt.templateUrl template.html 
-             * @gwt.elementId welcome 
-             */ 
-            String getWelcome();   //template.html is in the same 
-package 
-        } 
-    } 
-
-
-
-} 
-
+Demo url: 
+http://jiangyongyuan.javaeye.com/admin/show/145689
 
 URL: 
 http://code.google.com/p/macaufly-gwt-tool/downloads/list 
