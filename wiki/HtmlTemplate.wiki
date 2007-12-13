@@ -14,7 +14,9 @@ Core :
 
 
 Template.gwt.xml 
+
 HTMLTemplatePanelX : html template inject the widget by id 
+
 ITemplateSource : html template interface 
 
 
