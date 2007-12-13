@@ -1,0 +1,70 @@
+#labels Phase-Support
+it's difficulty to write a pretty page by gwt . like the layout and so 
+on. 
+
+so if it can use the html to layout and some UI design,it's easy to 
+make it more pretty. 
+
+
+HTML Template is a module help you to load the page when gwt compiling 
+& automate to inject the widgets by id which define in the page . 
+
+
+Core : 
+
+
+Template.gwt.xml 
+HTMLTemplatePanelX : html template inject the widget by id 
+ITemplateSource : html template interface 
+
+
+Demo: 
+
+
+public class TestApp implements EntryPoint{ 
+
+
+    public void onModuleLoad() { 
+
+
+        TestHtml html = new TestHtml(); 
+
+
+        RootPanel.get().add(html); 
+    } 
+
+
+    static class TestHtml extends HTMLTemplatePanelX{ 
+        public TestHtml(){ 
+            Template template = (Template) 
+GWT.create(Template.class); 
+            String html = template.getWelcome(); 
+
+
+            TextBox txt1 = new TextBox(); 
+            Button  btn1 = new Button("Click welcome"); 
+
+
+            super.widgets.put("txt1", txt1); 
+            super.widgets.put("btn1", btn1); 
+            super.setHtml(html); 
+        } 
+
+
+        interface Template extends ITemplateSource{ 
+            /** 
+             * @gwt.templateUrl template.html 
+             * @gwt.elementId welcome 
+             */ 
+            String getWelcome();   //template.html is in the same 
+package 
+        } 
+    } 
+
+
+
+} 
+
+
+URL: 
+http://code.google.com/p/macaufly-gwt-tool/downloads/list 
