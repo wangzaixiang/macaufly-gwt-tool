@@ -1,0 +1,4 @@
+#labels Phase-Support
+gwt remote service how to test:
+
+http://jiangyongyuan.javaeye.com/admin/blogs/151302
