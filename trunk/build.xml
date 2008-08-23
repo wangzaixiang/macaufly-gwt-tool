@@ -1,0 +1,143 @@
+<project name="gwt.macaufly" default="build-unfold-war">
+<!--
+com.macaufly.gwt=E:/eclipse/workspace/com.macaufly.gwt
+gwt.sdk=E:/eclipse/workspace/gwt-sdk
+jpa.sdk=E:/eclipse/workspace/jpa.sdk
+spring.sdk=E:/eclipse/workspace/spring.sdk
+gwt.sdk.lib=E:/eclipse/workspace/gwt-sdk/gwt-windows-1.4.60
+-->
+	<property file="build.properties" />
+	<property name="project.dir" value="${basedir}" />
+	<property name="output.dir" value="public" />
+	<property name="report.dir" value="${project.dir}/report" />
+	<property name="test.dir" value="${project.dir}/server/test" />
+
+	<path id="gwt.compiler.class.path">
+		<pathelement location="${project.dir}/domain/src" />
+		<pathelement location="${project.dir}/gwt/src" />
+		<pathelement location="${project.dir}/gwt/test" />
+		<pathelement location="${project.dir}/gwt-hibernate-patch" />
+		<pathelement location="${project.dir}/classes" />
+		<pathelement location="${com.macaufly.gwt}/src" />
+		<pathelement location="${com.macaufly.gwt}/hack" />
+		<pathelement location="${com.macaufly.gwt}/bin" />
+		<pathelement location="${com.macaufly.gwt}/lib/htmlparser.jar" />
+		<pathelement location="${gwt.sdk}/lib/mygwt.jar" />
+		<pathelement location="${gwt.sdk.lib}/gwt-dev-windows.jar" />
+		<pathelement location="${gwt.sdk.lib}/gwt-user.jar" />
+		<pathelement location="${jpa.sdk}/lib/hibernate3.jar"/>
+		<pathelement location="${jpa.sdk}/lib/jboss-ejb3x.jar"/>
+		<pathelement location="${spring.sdk}/lib/spring.jar"/>
+	</path>
+
+	<macrodef name="gwt-compile">
+		<attribute name="moduleName" />
+		<sequential>
+			<echo message="Compile gwt module:@{moduleName}" />
+			<java classname="com.google.gwt.dev.GWTCompiler" fork="true">
+				<classpath refid="gwt.compiler.class.path" />
+				<jvmarg value="-Xmx1024m" />
+				<jvmarg value="-Xms512m" />
+				<arg value="-out" />
+				<arg value="${output.dir}" />
+				
+				<arg value="-style" />
+				<arg value="pretty" /><!-- 
+				<arg value="-logLevel"/>
+				<arg value="DEBUG" />-->
+				<arg value="@{moduleName}" />
+			</java>
+		</sequential>
+	</macrodef>
+
+	<target name="compile-gwt-modules" >
+		<!--
+		<gwt-compile modulename=""/>
+		-->
+	</target>
+
+	<target name="build-macaufly-gwt">
+		<mkdir dir="${com.macaufly.gwt}/bin" />
+		<mkdir dir="${project.dir}/classes" />
+
+		<javac srcdir="${com.macaufly.gwt}/src" encoding="utf-8" destdir="${com.macaufly.gwt}/bin" classpathref="gwt.compiler.class.path" />
+
+		<javac srcdir="${project.dir}/domain/src" encoding="utf-8" destdir="${project.dir}/classes" classpathref="gwt.compiler.class.path" >
+			<exclude name="com\hotye\backend\**"/>
+		</javac>
+
+		<javac srcdir="${project.dir}/gwt/src" encoding="utf-8" destdir="${project.dir}/classes" classpathref="gwt.compiler.class.path" >
+			<exclude name="com\hotye\core\**"/>
+			<exclude name="com\hotye\website\carhome\public\core\**"/>
+			<exclude name="com\hotye\backend\**"/>
+		</javac>
+	</target>
+
+	<target name="build-unfold-war" depends="build-macaufly-gwt,compile-gwt-modules">
+		<mkdir dir="${output.dir}/WEB-INF" />
+		<mkdir dir="${output.dir}/WEB-INF/config" />
+		<mkdir dir="${output.dir}/WEB-INF/config/soa" />
+		<mkdir dir="${output.dir}/WEB-INF/lib" />
+		<mkdir dir="${output.dir}/WEB-INF/classes" />
+		<mkdir dir="${output.dir}/web" />
+
+		<copy todir="${output.dir}/WEB-INF/classes">
+			<fileset dir="${project.dir}/server/src" includes="*.xml"/>
+			<fileset dir="${project.dir}/server/src" includes="*.txt"/>
+			<fileset dir="${project.dir}/server/src" includes="*.properties"/>
+		</copy>
+
+		<copy todir="${output.dir}/WEB-INF/config">
+			<fileset dir="${project.dir}/config" includes="*.*">
+			</fileset>
+		</copy>
+
+		<copy todir="${output.dir}/WEB-INF/config/soa">
+			<fileset dir="${project.dir}/config/soa" includes="*.xml">
+			</fileset>
+		</copy>
+
+		<copy todir="${output.dir}/WEB-INF/lib">
+			<fileset dir="${project.dir}/lib" includes="*.jar" />
+			<!--			<fileset dir="${project.dir}/lib/jax-ws" includes="*.jar" />-->
+			<fileset dir="${project.dir}/lib/xfire-ws" includes="*.jar" />
+			<fileset dir="${project.dir}/lib/csv" includes="*.jar" />
+			<fileset dir="${project.dir}/lib/xfire-ws/ws-server" includes="*.jar" />
+			<fileset dir="${project.dir}/lib/ecpsoa" includes="*.jar" />
+			<fileset dir="${project.dir}/lib/ecp" includes="*.jar" />
+			<fileset dir="${project.dir}/lib/jindun" includes="*.jar" />
+			<fileset dir="${gwt.sdk.lib}" includes="gwt-servlet.jar" />
+			<fileset dir="${spring.sdk}/lib" includes="*.jar" />
+			<fileset dir="${jpa.sdk}/lib" includes="*.jar" />
+		</copy>
+
+		<javac srcdir="${project.dir}/server/src" encoding="utf-8" destdir="${project.dir}/classes" classpathref="gwt.compiler.class.path"
+		>
+			<exclude name="com\hotye\cone\**"/>
+			<exclude name="com\hotye\server\timertask\conce\ExGrtiaScheduler.java"/>
+			<exclude name="com\hotye\server\timertask\conce\ExGratiaJob.java"/>
+		</javac>
+		<!--
+		<javac srcdir="${project.dir}/service/test" encoding="utf-8" destdir="${project.dir}/classes" classpathref="gwt.compiler.class.path" />
+		-->
+		<copy todir="${output.dir}/WEB-INF/classes">
+			<fileset dir="${project.dir}/classes" />
+			<fileset dir="${com.macaufly.gwt}/bin" />
+		</copy>
+
+		<copy file="${project.dir}/etc/web.xml" tofile="${output.dir}/WEB-INF/web.xml" />
+		<touch file="${output.dir}/WEB-INF/web.xml">
+		</touch>
+	</target>
+
+	<!-- prepare-host -->
+
+	<target name="prepare-host">
+		<echo message="Prepare GWT Host environment" />
+		<mkdir dir="tomcat/webapps/ROOT/WEB-INF" />
+		<copy todir="tomcat/webapps/ROOT/WEB-INF">
+			<fileset dir="server/src" includes="*.xml" />
+		</copy>
+		<copy file="etc/hosted-web.xml" tofile="tomcat/webapps/ROOT/WEB-INF/web.xml" />
+	</target>
+</project>

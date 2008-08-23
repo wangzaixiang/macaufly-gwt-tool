@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="trunk/gwt"/>
+	<classpathentry kind="src" path="trunk/server"/>
+	<classpathentry kind="src" path="trunk/test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/gwt-sdk"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

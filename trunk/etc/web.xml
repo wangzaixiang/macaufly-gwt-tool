@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app>
+	<!-- 整合spring	
+	<listener>
+		<listener-class>
+			org.springframework.web.context.ContextLoaderListener
+		</listener-class>
+	</listener>
+	
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/applicationContext.xml</param-value>
+	</context-param>
+
+		整合spring结束
+	-->
+	
+	<!--
+		spring服务动态调用servlet 
+	<servlet>
+		<servlet-name>gwt rpc dispatcher</servlet-name>
+		<servlet-class>
+			com.macaufly.jee.spring.GWTRemoteServiceServlet
+		</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>gwt rpc dispatcher</servlet-name>
+		<url-pattern>/rpc/*</url-pattern>
+	</servlet-mapping>
+		spring服务动态调用结束
+	-->
+
+</web-app>
